@@ -1,0 +1,103 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #002f4b, #006494, #00b4d8, #90e0ef);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+    font-family: sans-serif;
+}
+
+.titulo {
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    text-align: center;
+    font-size: 55px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 5px #000;
+    margin: 0;
+    z-index: 10;
+}
+
+
+.game-container {
+    display: grid;
+    grid-template-columns: repeat(4, 226.36px);
+    grid-gap: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    /* Fondo transparente removido */
+}
+
+.card {
+    width: 226.36px;
+    height: 347.99px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card:not(.flipped):hover .card-back {
+    animation: shine 2s infinite linear;
+}
+
+@keyframes shine {
+    0% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.2);
+    }
+    100% {
+        filter: brightness(1);
+    }
+}
+
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
+
+.card-front {
+    transform: rotateY(180deg);
+    z-index: 2;
+}
+
+.card-back {
+    transform: rotateY(0deg);
+    z-index: 1;
+}
+
+.card-back img,
+.card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
