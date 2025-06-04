@@ -9,7 +9,6 @@ const images = [
     'style/assets/Musica.png'
 ];
 
-// Sonidos
 const soundCard = new Audio('style/audio/card.mp3');
 const soundCheck = new Audio('style/audio/check.mp3');
 const soundVictory = new Audio('style/audio/victoria.mp3');
@@ -20,11 +19,12 @@ let cardImages = [...images, ...images];
 cardImages.sort(() => 0.5 - Math.random());
 
 let firstCard = null;
-let lockBoard = true; // Bloquear mientras se muestra la vista previa
+let lockBoard = true;
+let paresConfirmados = 0;
 
 function createCard(image) {
     const card = document.createElement('div');
-    card.classList.add('card', 'flipped'); // Mostrar imagen al inicio
+    card.classList.add('card');
     card.innerHTML = `
         <div class="card-inner">
             <div class="card-front"><img src="${image}" alt=""></div>
@@ -40,15 +40,17 @@ cardImages.forEach(image => {
     gameContainer.appendChild(card);
 });
 
-// Después de 2 segundos, ocultar cartas y activar el juego
+const allCards = document.querySelectorAll('.card');
+
+// Vista previa inicial
+allCards.forEach(card => card.classList.add('flipped'));
+
 setTimeout(() => {
-    const allCards = document.querySelectorAll('.card');
     allCards.forEach(card => card.classList.remove('flipped'));
     allCards.forEach(card => card.addEventListener('click', handleCardClick));
     lockBoard = false;
-}, 2000);
+}, 3000);
 
-// Lógica de clic en cartas
 function handleCardClick() {
     const card = this;
 
@@ -56,7 +58,6 @@ function handleCardClick() {
 
     soundCard.currentTime = 0;
     soundCard.play();
-
     card.classList.add('flipped');
 
     if (!firstCard) {
@@ -72,36 +73,37 @@ function handleCardClick() {
             soundCheck.currentTime = 0;
             soundCheck.play();
 
-            firstCard = null;
+            confetti({
+                particleCount: 40,
+                spread: 70,
+                origin: { x: 0.5, y: 0.5 }
+            });
 
-            const matchedCards = document.querySelectorAll('.matched');
-            if (matchedCards.length === cardImages.length) {
+            paresConfirmados++;
+
+            if (paresConfirmados === images.length) {
                 setTimeout(() => {
-                    // 🎉 Confeti + sonido de victoria al mismo tiempo
                     soundVictory.play();
 
+                    // 🎊 Confeti intenso en múltiples direcciones
                     const duration = 2000;
                     const end = Date.now() + duration;
 
                     (function frame() {
                         confetti({
-                            particleCount: 7,
-                            angle: 60,
-                            spread: 55,
-                            origin: { x: 0 }
-                        });
-                        confetti({
-                            particleCount: 7,
-                            angle: 120,
-                            spread: 55,
-                            origin: { x: 1 }
+                            particleCount: 10,
+                            spread: 100,
+                            origin: { x: Math.random(), y: Math.random() * 0.5 }
                         });
                         if (Date.now() < end) requestAnimationFrame(frame);
                     })();
 
-                    setTimeout(() => location.reload(), 3000);
+                    mostrarPantallaVictoria();
+                    setTimeout(() => location.reload(), 5000);
                 }, 800);
             }
+
+            firstCard = null;
         } else {
             lockBoard = true;
             setTimeout(() => {
@@ -112,4 +114,11 @@ function handleCardClick() {
             }, 1000);
         }
     }
+}
+
+function mostrarPantallaVictoria() {
+    const box = document.createElement('div');
+    box.id = 'victoryBox';
+    box.textContent = '🏆 ¡Ganaste! Encontraste todos los pares.';
+    document.body.appendChild(box);
 }

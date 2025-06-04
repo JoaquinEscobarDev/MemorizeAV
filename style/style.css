@@ -8,6 +8,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     min-height: 100vh;
     height: auto;
     overflow-y: auto;
@@ -15,18 +16,15 @@ body {
 }
 
 .titulo {
-    position: absolute;
-    top: 30px;
+    margin-top: 30px;
     width: 100%;
     text-align: center;
     font-size: 55px;
     font-weight: bold;
     color: white;
     text-shadow: 2px 2px 5px #000;
-    margin: 0;
     z-index: 10;
 }
-
 
 .game-container {
     display: grid;
@@ -34,7 +32,6 @@ body {
     grid-gap: 20px;
     padding: 20px;
     border-radius: 12px;
-    /* Fondo transparente removido */
 }
 
 .card {
@@ -57,17 +54,10 @@ body {
 }
 
 @keyframes shine {
-    0% {
-        filter: brightness(1);
-    }
-    50% {
-        filter: brightness(1.2);
-    }
-    100% {
-        filter: brightness(1);
-    }
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+    100% { filter: brightness(1); }
 }
-
 
 .card.flipped .card-inner {
     transform: rotateY(180deg);
@@ -100,4 +90,59 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+/* Banner de victoria */
+#victoryBanner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #00c6ff;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 20px;
+    z-index: 999;
+    animation: slideUp 0.5s ease-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+#victoryBox {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: #003973;
+    padding: 30px 50px;
+    border-radius: 20px;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 999;
+    animation: fadePop 0.5s ease-out;
+    box-shadow: 0 0 25px rgba(0,0,0,0.3);
+}
+
+@keyframes fadePop {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
 }
