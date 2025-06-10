@@ -14,13 +14,14 @@ const soundCheck = new Audio('style/audio/check.mp3');
 const soundVictory = new Audio('style/audio/victoria.mp3');
 
 const gameContainer = document.getElementById('gameContainer');
-
 let cardImages = [...images, ...images];
 cardImages.sort(() => 0.5 - Math.random());
 
 let firstCard = null;
 let lockBoard = true;
 let paresConfirmados = 0;
+let startTime = null;
+let timerInterval = null;
 
 function createCard(image) {
     const card = document.createElement('div');
@@ -34,6 +35,24 @@ function createCard(image) {
     return card;
 }
 
+function startTimer() {
+    startTime = Date.now();
+    const timerDisplay = document.createElement('div');
+    timerDisplay.id = 'timer';
+    document.body.appendChild(timerDisplay);
+
+    timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        timerDisplay.textContent = `⏱️ Tiempo: ${elapsed} segundos`;
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    return elapsed;
+}
+
 // Crear y mostrar cartas
 cardImages.forEach(image => {
     const card = createCard(image);
@@ -41,15 +60,14 @@ cardImages.forEach(image => {
 });
 
 const allCards = document.querySelectorAll('.card');
-
-// Vista previa inicial
 allCards.forEach(card => card.classList.add('flipped'));
 
 setTimeout(() => {
     allCards.forEach(card => card.classList.remove('flipped'));
     allCards.forEach(card => card.addEventListener('click', handleCardClick));
     lockBoard = false;
-}, 3000);
+    startTimer();
+}, 500);
 
 function handleCardClick() {
     const card = this;
@@ -83,6 +101,7 @@ function handleCardClick() {
 
             if (paresConfirmados === images.length) {
                 setTimeout(() => {
+                    const totalTime = stopTimer();
                     soundVictory.play();
 
                     // 🎊 Confeti intenso en múltiples direcciones
@@ -98,7 +117,7 @@ function handleCardClick() {
                         if (Date.now() < end) requestAnimationFrame(frame);
                     })();
 
-                    mostrarPantallaVictoria();
+                    mostrarPantallaVictoria(totalTime);
                     setTimeout(() => location.reload(), 5000);
                 }, 800);
             }
@@ -116,9 +135,13 @@ function handleCardClick() {
     }
 }
 
-function mostrarPantallaVictoria() {
+function mostrarPantallaVictoria(tiempo) {
     const box = document.createElement('div');
     box.id = 'victoryBox';
-    box.textContent = '🏆 ¡Ganaste! Encontraste todos los pares.';
+    box.innerHTML = `
+        <h2>🏆 ¡Felicidades!</h2>
+        <p>Encontraste todos los pares</p>
+        <p>⏱️ Tiempo total: ${tiempo} segundos</p>
+    `;
     document.body.appendChild(box);
 }

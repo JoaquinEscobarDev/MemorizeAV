@@ -92,48 +92,32 @@ body {
     object-fit: cover;
 }
 
-/* Banner de victoria */
-#victoryBanner {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #00c6ff;
-    color: white;
-    padding: 15px 30px;
-    border-radius: 10px;
-    font-size: 20px;
-    z-index: 999;
-    animation: slideUp 0.5s ease-out;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-@keyframes slideUp {
-    from {
-        transform: translate(-50%, 100%);
-        opacity: 0;
-    }
-    to {
-        transform: translate(-50%, 0);
-        opacity: 1;
-    }
-}
-
+/* Banner de victoria centrado */
 #victoryBox {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: #cceeff;
     color: #003973;
-    padding: 30px 50px;
+    padding: 40px 60px;
     border-radius: 20px;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: bold;
     text-align: center;
     z-index: 999;
     animation: fadePop 0.5s ease-out;
     box-shadow: 0 0 25px rgba(0,0,0,0.3);
+}
+
+#victoryBox h2 {
+    margin-bottom: 10px;
+    font-size: 32px;
+}
+
+#victoryBox p {
+    margin: 10px 0;
+    font-size: 22px;
 }
 
 @keyframes fadePop {
@@ -145,4 +129,17 @@ body {
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
     }
+}
+
+/* Cronómetro */
+#timer {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    font-size: 20px;
+    color: white;
+    background: rgba(0,0,0,0.4);
+    padding: 8px 16px;
+    border-radius: 8px;
+    z-index: 999;
 }
